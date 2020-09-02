@@ -11,7 +11,7 @@ namespace EngineSimulation
         //engine inertiaI
         const double Inertia = 10;
 
-        const double TOfOverheating = 110;
+        const double OverheatingTemperature = 110;
 
         //Коэффициент зависимости скорости нагрева от крутящего момента
         const double Hm = 0.01;
@@ -23,7 +23,7 @@ namespace EngineSimulation
         const double C = 0.1;
 
         //Температура двигателя
-        double TOfEngine=0;
+        double EngineTemperature=0;
 
         //Температура снаружи
         double TOutside;
@@ -75,7 +75,7 @@ namespace EngineSimulation
 
 
                 TOutside = OutsideTemperature;
-                TOfEngine = TOutside;
+                EngineTemperature = TOutside;
 
                 
                 //начальная скорость
@@ -96,17 +96,27 @@ namespace EngineSimulation
 
                     //Console.Write($"Cooling speed= {Math.Round(CalculateCoolingSpeed(), 4)}  HeatingSpeed= {Math.Round(CalculateHeatingSpeed(), 4)} \n");
 
-                    //TOfEngine += Math.Round(CalculateCoolingSpeed(),4)  + Math.Round(CalculateHeatingSpeed(), 4) ;
-
-                    TOfEngine += CalculateCoolingSpeed() +CalculateHeatingSpeed() ;
-
-                    Console.WriteLine($"Temperature={TOfEngine} V= {CrankshaftRotationSpeed} " + $"M= {EngineTorque}  Time={TimeInSeconds}");
-                    Console.WriteLine("\n----------------------------- \n");
-
+                    //EngineTemperature += Math.Round(CalculateCoolingSpeed(),4)  + Math.Round(CalculateHeatingSpeed(), 4) ;
 
                     
+                    EngineTemperature += CalculateCoolingSpeed() +CalculateHeatingSpeed() ;
 
-                    if(TOfEngine>=TOfOverheating)
+                    if(EngineTemperature-PreviousTemperature<Epsilon)
+                    {
+                        throw new Exception("The engine will not overheat");
+                    }
+                    else
+                    {
+                        PreviousTemperature = EngineTemperature;
+                    }
+
+                    //Console.WriteLine($"Temperature={EngineTemperature} V= {CrankshaftRotationSpeed} " + $"M= {EngineTorque}  Time={TimeInSeconds}");
+                   // Console.WriteLine("\n----------------------------- \n");
+
+                     
+                    
+
+                    if(EngineTemperature>=OverheatingTemperature)
                     {
                         return TimeInSeconds;
                     }
@@ -155,7 +165,7 @@ namespace EngineSimulation
         {
             double CoolingSpeed = 0;
 
-            CoolingSpeed = C * (TOutside - TOfEngine);
+            CoolingSpeed = C * (TOutside - EngineTemperature);
 
             return CoolingSpeed;
         }

@@ -75,8 +75,18 @@ namespace EngineSimulation
 
                                     if (double.TryParse(LineString, out double OutsideTemperature))
                                     {
-                                        var time=IEngine.RunEnigneSimulation(OutsideTemperature);
-                                        Console.WriteLine($"Time in seconds before overheating : {time}");
+
+                                        try
+                                        {
+                                            var time = IEngine.RunEnigneSimulation(OutsideTemperature);
+                                            Console.WriteLine($"Time in seconds before overheating : {time}");
+                                        }
+                                        catch (Exception e)
+                                        {
+
+                                            Console.WriteLine(e.Message); 
+                                        }
+                                        
                                     }
 
                                 }
