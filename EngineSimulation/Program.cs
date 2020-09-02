@@ -8,52 +8,93 @@ namespace EngineSimulation
 {
     class Program
     {
-        //engine inertiaI
-        const double Inertia = 10;
-
-        const double TOfOverheating = 110;
-
-        //Коэффициент зависимости скорости нагрева от крутящего момента
-        const double Hm = 0.01;
-
-        //Коэффициент зависимости скорости нагрева от скорости вращения коленвала 
-        const double Hv = 0.0001;
-
-        //Коэффициент зависимости скорости охлаждения от температуры двигателя и окружающей среды
-        const double C = 0.1;
-
-        //Температура двигателя
-        double TOfEngine;
-
-        Dictionary<int, int> MDictionary = new Dictionary<int, int>();
-        private Dictionary<int, int> VDictionary = new Dictionary<int, int>();
+    
 
 
-        void Main(string[] args)
+        static void Main(string[] args)
         {
-            SetUpDictionaries();
 
-            Console.Write("Hello world");
-            Console.ReadKey();
+            // M array
+            int[] MArray = new int[6];
 
+            MArray[0] = 20;
+            MArray[1] = 75;
+            MArray[2] = 100;
+            MArray[3] = 105;
+            MArray[4] = 75;
+            MArray[5] = 0;
+            
+            // V array
+            int[] VArray = new int[6];
+
+            VArray[0] = 0;
+            VArray[1] = 75;
+            VArray[2] = 150;
+            VArray[3] = 200;
+            VArray[4] = 250;
+            VArray[5] = 300;
+            
+            
+            string LineString;
+
+            Engine IEngine = new Engine();
+
+            IEngine.FillMArray(MArray);
+            IEngine.FillVArray(VArray);
+
+            
+            
+            
+
+            while(true)
+            {
+                PrintMenu();
+
+                LineString=Console.ReadLine();
+
+                if(LineString.Length==1)
+                {
+                    switch (LineString)
+                    {
+                        case "1":
+                            {
+                                break;
+                            }
+
+                        case "2":
+                            {
+                                break;
+                            }
+                        case "3":
+                            {
+                                break;
+                            }
+
+                        case "q":
+                            {
+                                return;
+                                
+                            }
+
+
+                        default:
+                            break;
+                    }
+                }
+            }
+            
 
         }
 
-        private void SetUpDictionaries()
+         static void PrintMenu()
         {
-            //  { 0,75,150,200,250,300},{ 20,75,100,105,75,0}
-            VDictionary.Add(20, 0);
-            VDictionary.Add(75,75);
-            VDictionary.Add(105,150);
-            VDictionary.Add(75,250);
-            VDictionary.Add(0,300);
+            string MenuString = "1) Run Engine Test \n";
 
-            MDictionary.Add(0, 20);
-            MDictionary.Add(75, 75);
-            MDictionary.Add(150, 105);
-            MDictionary.Add(250, 75);
-            MDictionary.Add(300, 0);
+            MenuString += "2) Placeholder \n";
 
+            Console.Write(MenuString);
         }
+
+      
     }
 }
