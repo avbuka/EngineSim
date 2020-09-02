@@ -23,10 +23,22 @@ namespace EngineSimulation
         const double C = 0.1;
 
         //Температура двигателя
-        double TOfEngine;
+        double TOfEngine=0;
 
         //Температура снаружи
         double TOutside;
+
+        //время в секундах , очевидно
+        double TimeInSeconds=0;
+
+        //ускорение 
+        double Acceleration=0;
+        
+        //скорость вращения коленвала  
+        double CrankshaftRotationSpeed=0;
+        
+        //крутящий момент двигателя 
+        double EngineTorque=20;
 
         private int[] MArray = null;
         private int[] VArray = null;
@@ -40,12 +52,56 @@ namespace EngineSimulation
             //VArray= new int[ArraySize];
 
         }
+        double Linear( int LeftBorder,double x)
+        {
+
+            double x0 = VArray[LeftBorder];
+            double y0= MArray[LeftBorder];
+            double x1= VArray[LeftBorder+1];
+            double y1= MArray[LeftBorder+1];
+
+            return ((x-x0)*(y1-y0)/(x1-x0))+y0;
+            
+
+        }
 
         public double RunEnigneSimulation(double OutsideTemperature)
         {
             if (OutsideTemperature > -150 && OutsideTemperature < 200)
             {
                 TOutside = OutsideTemperature;
+                TOfEngine = TOutside;
+
+                //начальная скорость
+                CrankshaftRotationSpeed = 0;
+
+                //engine  simulation func
+                while (true)
+                {
+                    CalculateAcceleration();
+                    
+                    CrankshaftRotationSpeed += Acceleration; // ??????????????????????????
+
+
+                    int LeftBorder = GetLeftBorderForInterpolation(CrankshaftRotationSpeed);
+                    
+                    EngineTorque = Math.Round(Linear(LeftBorder, CrankshaftRotationSpeed),4);
+
+                    //Console.Write($"Cooling speed= {Math.Round(CalculateCoolingSpeed(), 4)}  HeatingSpeed= {Math.Round(CalculateHeatingSpeed(), 4)} \n");
+
+                    TOfEngine += Math.Round(CalculateCoolingSpeed(),4)  + Math.Round(CalculateHeatingSpeed(), 4) ;
+
+                   // Console.WriteLine($"Temperature={TOfEngine} V= {CrankshaftRotationSpeed} " + $"M= {EngineTorque}  Time={TimeInSeconds}");
+                 //   Console.WriteLine("\n----------------------------- \n");
+
+                    if(TOfEngine>=TOfOverheating)
+                    {
+                        return TimeInSeconds;
+                    }
+
+
+                    TimeInSeconds++;
+                }
 
                 throw new NotFiniteNumberException();
             }
@@ -55,11 +111,29 @@ namespace EngineSimulation
             }
         }
 
+        private int GetLeftBorderForInterpolation(double crankshaftRotationSpeed)
+        {
+            for (int i = 0; i < VArray.Length-1; i++)
+            {
+                if(VArray[i]<=crankshaftRotationSpeed && crankshaftRotationSpeed<=VArray[i+1])
+                {
+                    return i;
+                }
+            }
+
+            throw new IndexOutOfRangeException();
+        }
+
+        private void CalculateAcceleration()
+        {
+            Acceleration =/*M /  */ EngineTorque / Inertia;
+        }
+
         private double CalculateHeatingSpeed()
         {
             double HeatingSpeed = 0;
 
-            HeatingSpeed = /*M * */ Hm +/*V^2 + */ Hv;
+            HeatingSpeed = EngineTorque* Hm +Math.Pow(CrankshaftRotationSpeed ,2) * Hv;
 
             return HeatingSpeed;
         

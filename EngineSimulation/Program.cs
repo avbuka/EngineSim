@@ -63,6 +63,23 @@ namespace EngineSimulation
 
                         case "2":
                             {
+                                Console.Clear();
+                                Console.Write("Outside temperature: \n");
+
+                                LineString = string.Empty;
+
+                                LineString = Console.ReadLine();
+
+                                if (LineString.Length >= 1)
+                                {
+
+                                    if (double.TryParse(LineString, out double OutsideTemperature))
+                                    {
+                                        var time=IEngine.RunEnigneSimulation(OutsideTemperature);
+                                        Console.WriteLine($"Time in seconds before overheating : {time}");
+                                    }
+
+                                }
                                 break;
                             }
                         case "3":
@@ -81,6 +98,10 @@ namespace EngineSimulation
                             break;
                     }
                 }
+                else
+                {
+                    
+                }
             }
             
 
@@ -90,7 +111,7 @@ namespace EngineSimulation
         {
             string MenuString = "1) Run Engine Test \n";
 
-            MenuString += "2) Placeholder \n";
+            MenuString += "2) Enter outside temperature \n";
 
             Console.Write(MenuString);
         }
