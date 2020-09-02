@@ -69,9 +69,15 @@ namespace EngineSimulation
         {
             if (OutsideTemperature > -150 && OutsideTemperature < 200)
             {
+                double DeltaTemperature = 0;
+                double PreviousTemperature = 0;
+                double Epsilon = 0.00000001;
+
+
                 TOutside = OutsideTemperature;
                 TOfEngine = TOutside;
 
+                
                 //начальная скорость
                 CrankshaftRotationSpeed = 0;
 
@@ -85,14 +91,20 @@ namespace EngineSimulation
 
                     int LeftBorder = GetLeftBorderForInterpolation(CrankshaftRotationSpeed);
                     
-                    EngineTorque = Math.Round(Linear(LeftBorder, CrankshaftRotationSpeed),4);
+                    //EngineTorque = Math.Round(Linear(LeftBorder, CrankshaftRotationSpeed),4);
+                    EngineTorque = Linear(LeftBorder, CrankshaftRotationSpeed);
 
                     //Console.Write($"Cooling speed= {Math.Round(CalculateCoolingSpeed(), 4)}  HeatingSpeed= {Math.Round(CalculateHeatingSpeed(), 4)} \n");
 
-                    TOfEngine += Math.Round(CalculateCoolingSpeed(),4)  + Math.Round(CalculateHeatingSpeed(), 4) ;
+                    //TOfEngine += Math.Round(CalculateCoolingSpeed(),4)  + Math.Round(CalculateHeatingSpeed(), 4) ;
 
-                   // Console.WriteLine($"Temperature={TOfEngine} V= {CrankshaftRotationSpeed} " + $"M= {EngineTorque}  Time={TimeInSeconds}");
-                 //   Console.WriteLine("\n----------------------------- \n");
+                    TOfEngine += CalculateCoolingSpeed() +CalculateHeatingSpeed() ;
+
+                    Console.WriteLine($"Temperature={TOfEngine} V= {CrankshaftRotationSpeed} " + $"M= {EngineTorque}  Time={TimeInSeconds}");
+                    Console.WriteLine("\n----------------------------- \n");
+
+
+                    
 
                     if(TOfEngine>=TOfOverheating)
                     {
