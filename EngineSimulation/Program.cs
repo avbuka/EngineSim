@@ -37,6 +37,8 @@ namespace EngineSimulation
             
             string LineString;
 
+            double Time = 0;
+
             Engine IEngine = new Engine();
 
             IEngine.FillMArray(MArray);
@@ -48,6 +50,7 @@ namespace EngineSimulation
 
             while(true)
             {
+
                 PrintMenu();
 
                 LineString=Console.ReadLine();
@@ -56,15 +59,12 @@ namespace EngineSimulation
                 {
                     switch (LineString)
                     {
+                    
                         case "1":
                             {
-                                break;
-                            }
-
-                        case "2":
-                            {
                                 Console.Clear();
-                                Console.Write("Outside temperature: \n");
+                                Console.Write("Please enter the outside temperature and press \"Enter\" \n");
+                                Console.Write("Temperature in C: ");
 
                                 LineString = string.Empty;
 
@@ -78,18 +78,34 @@ namespace EngineSimulation
 
                                         try
                                         {
-                                            var time = IEngine.RunEnigneSimulation(OutsideTemperature);
-                                            Console.WriteLine($"Time in seconds before overheating : {time}");
+                                            Time= IEngine.RunEnigneSimulation(OutsideTemperature);
+
+                                           
+
+                                            
+                                            PrintResult(OutsideTemperature, Time);
+                                            break;
+
                                         }
                                         catch (Exception e)
                                         {
 
-                                            Console.WriteLine(e.Message); 
+                                            Console.WriteLine(e.Message);
+                                            Console.WriteLine("Press any key to go back.\n");
+                                            Console.ReadKey();
+                                            break;
+
                                         }
-                                        
+
+
                                     }
 
                                 }
+                                
+                                    Console.WriteLine("Wrong input, try again. \nPress any key to go back.");
+                                    Console.ReadKey();
+
+                                
                                 break;
                             }
                         case "3":
@@ -99,13 +115,20 @@ namespace EngineSimulation
 
                         case "q":
                             {
+
                                 return;
                                 
                             }
 
 
                         default:
-                            break;
+                            {
+                                Console.WriteLine("Wrong input, try again. \nPress any key to go back.");
+                                Console.ReadKey();
+
+                                break;
+
+                            }
                     }
                 }
                 else
@@ -117,12 +140,38 @@ namespace EngineSimulation
 
         }
 
-         static void PrintMenu()
+        private static void PrintResult(double OutsideTemperature ,double Time)
         {
-            string MenuString = "1) Run Engine Test \n";
+            Console.Clear();
 
-            MenuString += "2) Enter outside temperature \n";
+            string OutputString = $"Given the outside temperature ({OutsideTemperature})";
 
+            if(Time>0)
+            {
+                OutputString += $" the engine will overheat in {Time} seconds.";
+            }
+            else
+            {
+                OutputString += $" the engine will not overheat.";
+            }
+
+
+            Console.WriteLine(OutputString);
+            Console.WriteLine("Press any key to continue ");
+            Console.ReadKey();
+        }
+
+        static void PrintMenu()
+        {
+            Console.Clear();
+
+            string MenuString = "Welcome to the ignition engine simulation program by Andrei Tarakanov. \n";
+            
+            MenuString += "Choose one option from below followed by \"Enter\" \n\n";
+            MenuString += "1) Run Engine Test \n";
+            MenuString += "q) Exit \n";
+
+          
             Console.Write(MenuString);
         }
 

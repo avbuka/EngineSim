@@ -67,7 +67,7 @@ namespace EngineSimulation
 
         public double RunEnigneSimulation(double OutsideTemperature)
         {
-            if (OutsideTemperature > -150 && OutsideTemperature < 200)
+            if (OutsideTemperature > -150 && OutsideTemperature < 110)
             {
                 double DeltaTemperature = 0;
                 double PreviousTemperature = 0;
@@ -103,7 +103,8 @@ namespace EngineSimulation
 
                     if(EngineTemperature-PreviousTemperature<Epsilon)
                     {
-                        throw new Exception("The engine will not overheat");
+                        TimeInSeconds = -1;
+                        return TimeInSeconds ;
                     }
                     else
                     {
@@ -129,7 +130,7 @@ namespace EngineSimulation
             }
             else
             {
-                throw new Exception("Extreme temperature given");
+                throw new Exception($"Error: Extreme temperature given ({OutsideTemperature} C)\n");
             }
         }
 
