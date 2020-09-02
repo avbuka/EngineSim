@@ -43,7 +43,35 @@ namespace EngineSimulation
 
         public double RunEnigneSimulation(double OutsideTemperature)
         {
-            throw new NotFiniteNumberException();
+            if (OutsideTemperature > -150 && OutsideTemperature < 200)
+            {
+                TOutside = OutsideTemperature;
+
+                throw new NotFiniteNumberException();
+            }
+            else
+            {
+                throw new Exception("Extreme temperature given");
+            }
+        }
+
+        private double CalculateHeatingSpeed()
+        {
+            double HeatingSpeed = 0;
+
+            HeatingSpeed = /*M * */ Hm +/*V^2 + */ Hv;
+
+            return HeatingSpeed;
+        
+        }
+
+        private double CalculateCoolingSpeed()
+        {
+            double CoolingSpeed = 0;
+
+            CoolingSpeed = C * (TOutside - TOfEngine);
+
+            return CoolingSpeed;
         }
 
         public void FillMArray(int [] RightMArray)
