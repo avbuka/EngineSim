@@ -1,4 +1,6 @@
-﻿using System;
+﻿//-- Copyright 2020 avbuka; all commercial usage is strictly prohibited.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,10 +45,7 @@ namespace EngineSimulation
 
             IEngine.FillMArray(MArray);
             IEngine.FillVArray(VArray);
-
-            
-            
-            
+         
 
             while(true)
             {
@@ -78,7 +77,7 @@ namespace EngineSimulation
 
                                         try
                                         {
-                                            Time= IEngine.RunEnigneSimulation(OutsideTemperature);
+                                            Time= IEngine.RunEngшneSimulation(OutsideTemperature);
 
                                            
 

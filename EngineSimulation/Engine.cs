@@ -1,4 +1,6 @@
-﻿using System;
+﻿//-- Copyright 2020 avbuka; all commercial usage is strictly prohibited.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +10,7 @@ namespace EngineSimulation
 {
     class Engine
     {
-        //engine inertiaI
+        //engine inertia
         const double Inertia = 10;
 
         const double OverheatingTemperature = 110;
@@ -45,13 +47,9 @@ namespace EngineSimulation
 
        public Engine()
         {
-            
-            //int ArraySize = 6;
-
-            //MArray = new int[ArraySize];
-            //VArray= new int[ArraySize];
-
         }
+
+        //линейная интерполяция для получения крутящего момента
         double Linear( int LeftBorder,double x)
         {
 
@@ -60,18 +58,17 @@ namespace EngineSimulation
             double x1= VArray[LeftBorder+1];
             double y1= MArray[LeftBorder+1];
 
-            return ((x-x0)*(y1-y0)/(x1-x0))+y0;
-            
-
+            return ((x-x0)*(y1-y0)/(x1-x0))+y0;        
         }
 
-        public double RunEnigneSimulation(double OutsideTemperature)
+        public double RunEngшneSimulation(double OutsideTemperature)
         {
             if (OutsideTemperature > -150 && OutsideTemperature < 110)
             {
-                double DeltaTemperature = 0;
-                double PreviousTemperature = 0;
+                //перемення для выхода если двиг не перегревается
                 double Epsilon = 0.00000001;
+
+                double PreviousTemperature = 0;
 
 
                 TOutside = OutsideTemperature;
@@ -86,21 +83,17 @@ namespace EngineSimulation
                 {
                     CalculateAcceleration();
                     
-                    CrankshaftRotationSpeed += Acceleration; // ??????????????????????????
+                    CrankshaftRotationSpeed += Acceleration; 
 
 
+                    //находим левую границу для послед. интерполяции
                     int LeftBorder = GetLeftBorderForInterpolation(CrankshaftRotationSpeed);
-                    
-                    //EngineTorque = Math.Round(Linear(LeftBorder, CrankshaftRotationSpeed),4);
-                    EngineTorque = Linear(LeftBorder, CrankshaftRotationSpeed);
 
-                    //Console.Write($"Cooling speed= {Math.Round(CalculateCoolingSpeed(), 4)}  HeatingSpeed= {Math.Round(CalculateHeatingSpeed(), 4)} \n");
+                    EngineTorque = Linear(LeftBorder, CrankshaftRotationSpeed); 
 
-                    //EngineTemperature += Math.Round(CalculateCoolingSpeed(),4)  + Math.Round(CalculateHeatingSpeed(), 4) ;
-
-                    
                     EngineTemperature += CalculateCoolingSpeed() +CalculateHeatingSpeed() ;
 
+                    //если прирост меньше Е, то двиг не перегреется
                     if(EngineTemperature-PreviousTemperature<Epsilon)
                     {
                         TimeInSeconds = -1;
@@ -111,11 +104,7 @@ namespace EngineSimulation
                         PreviousTemperature = EngineTemperature;
                     }
 
-                    //Console.WriteLine($"Temperature={EngineTemperature} V= {CrankshaftRotationSpeed} " + $"M= {EngineTorque}  Time={TimeInSeconds}");
-                   // Console.WriteLine("\n----------------------------- \n");
-
-                     
-                    
+           
 
                     if(EngineTemperature>=OverheatingTemperature)
                     {
@@ -125,8 +114,7 @@ namespace EngineSimulation
 
                     TimeInSeconds++;
                 }
-
-                throw new NotFiniteNumberException();
+             
             }
             else
             {
@@ -149,17 +137,12 @@ namespace EngineSimulation
 
         private void CalculateAcceleration()
         {
-            Acceleration =/*M /  */ EngineTorque / Inertia;
+            Acceleration = EngineTorque / Inertia;
         }
 
         private double CalculateHeatingSpeed()
         {
-            double HeatingSpeed = 0;
-
-            HeatingSpeed = EngineTorque* Hm +Math.Pow(CrankshaftRotationSpeed ,2) * Hv;
-
-            return HeatingSpeed;
-        
+            return EngineTorque * Hm + Math.Pow(CrankshaftRotationSpeed, 2) * Hv;
         }
 
         private double CalculateCoolingSpeed()
