@@ -11,42 +11,90 @@ namespace EngineSimulation
     class Engine
     {
         //engine inertia
-        const double Inertia = 10;
+        private const double Inertia = 10;
 
-        const double OverheatingTemperature = 110;
+        private const double OverheatingTemperature = 110;
 
         //Коэффициент зависимости скорости нагрева от крутящего момента
-        const double Hm = 0.01;
+        private const double Hm = 0.01;
 
         //Коэффициент зависимости скорости нагрева от скорости вращения коленвала 
-        const double Hv = 0.0001;
+        private const double Hv = 0.0001;
 
         //Коэффициент зависимости скорости охлаждения от температуры двигателя и окружающей среды
-        const double C = 0.1;
+        private const double C = 0.1;
 
         //Температура двигателя
-        double EngineTemperature=0;
+        private double EngineTemperature =0;
 
         //Температура снаружи
-        double TOutside;
+        private double TOutside;
 
         //время в секундах , очевидно
-        double TimeInSeconds=0;
+        private double TimeInSeconds =0;
 
         //ускорение 
-        double Acceleration=0;
-        
+        private double Acceleration =0;
+
         //скорость вращения коленвала  
-        double CrankshaftRotationSpeed=0;
-        
+        private double CrankshaftRotationSpeed =0;
+
         //крутящий момент двигателя 
-        double EngineTorque=20;
+        private double EngineTorque =20;
 
         private int[] MArray = null;
         private int[] VArray = null;
 
        public Engine()
         {
+        }
+        public override string ToString()
+        {
+            string ReturnString =string.Empty;
+
+            ReturnString += "Inertia = " + Inertia +"\n";
+
+            if(MArray!=null)
+            {
+                ReturnString += "M = {";
+                
+                for (int i = 0; i < MArray.Length; i++)
+                {
+                    ReturnString += " " + MArray[i];
+
+                    if(i<MArray.Length-1)
+                    {
+                        ReturnString += ",";
+                    }
+                }
+
+                ReturnString += "} \n";
+            }
+            
+            if(VArray!=null)
+            {
+                ReturnString += "V = {";
+                
+                for (int i = 0; i < VArray.Length; i++)
+                {
+                    ReturnString += " " + VArray[i];
+
+                    if (i < VArray.Length - 1)
+                    {
+                        ReturnString += ",";
+                    }
+                }
+
+                ReturnString += "} \n";
+            }
+
+            ReturnString += "Temperature of overheating = " + OverheatingTemperature + "\n";
+            ReturnString += "Hm = " + Hm + "\n";
+            ReturnString += "Hv = " + Hv + "\n";
+            ReturnString += "C = " + C + "\n";
+
+
+            return ReturnString;
         }
 
         //линейная интерполяция для получения крутящего момента
@@ -61,7 +109,7 @@ namespace EngineSimulation
             return ((x-x0)*(y1-y0)/(x1-x0))+y0;        
         }
 
-        public double RunEngшneSimulation(double OutsideTemperature)
+        public double RunEngineSimulation(double OutsideTemperature)
         {
             if (OutsideTemperature > -150 && OutsideTemperature < 110)
             {
@@ -118,7 +166,7 @@ namespace EngineSimulation
             }
             else
             {
-                throw new Exception($"Error: Extreme temperature given ({OutsideTemperature} C)\n");
+                throw new Exception($"Error: Extreme temperature given ({OutsideTemperature} C).\n");
             }
         }
 
@@ -158,7 +206,7 @@ namespace EngineSimulation
         {
             if (RightMArray.Length<=0)
             {
-                throw new Exception("Zero length array given");
+                throw new Exception("Zero length array given.");
             }
 
             MArray = new int[RightMArray.Length];
@@ -173,7 +221,7 @@ namespace EngineSimulation
         {
             if (RightVArray.Length <= 0)
             {
-                throw new Exception("Zero length array given");
+                throw new Exception("Zero length array given.");
             }
 
             VArray = new int[RightVArray.Length];

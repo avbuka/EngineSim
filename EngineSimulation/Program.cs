@@ -52,6 +52,7 @@ namespace EngineSimulation
 
                 PrintMenu();
 
+                
                 LineString=Console.ReadLine();
 
                 if(LineString.Length==1)
@@ -62,7 +63,7 @@ namespace EngineSimulation
                         case "1":
                             {
                                 Console.Clear();
-                                Console.Write("Please enter the outside temperature and press \"Enter\" \n");
+                                Console.Write("Please enter the outside temperature and press \"Enter\". \n");
                                 Console.Write("Temperature in C: ");
 
                                 LineString = string.Empty;
@@ -77,8 +78,9 @@ namespace EngineSimulation
 
                                         try
                                         {
-                                            Time= IEngine.RunEngшneSimulation(OutsideTemperature);
+                                            Time= IEngine.RunEngineSimulation(OutsideTemperature);
 
+                                            
                                            
 
                                             
@@ -107,8 +109,12 @@ namespace EngineSimulation
                                 
                                 break;
                             }
-                        case "3":
+                        case "2":
                             {
+                                Console.Clear();
+                                Console.WriteLine(IEngine.ToString());
+                                Console.WriteLine("Press any key to go back.\n");
+                                Console.ReadKey();
                                 break;
                             }
 
@@ -166,8 +172,9 @@ namespace EngineSimulation
 
             string MenuString = "Welcome to the ignition engine simulation program by Andrei Tarakanov. \n";
             
-            MenuString += "Choose one option from below followed by \"Enter\" \n\n";
+            MenuString += "Choose one option from below followed by \"Enter\". \n\n";
             MenuString += "1) Run Engine Test \n";
+            MenuString += "2) Print engine specs \n";
             MenuString += "q) Exit \n";
 
           
