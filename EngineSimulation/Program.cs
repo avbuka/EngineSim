@@ -87,11 +87,7 @@ namespace EngineSimulation
                                         try
                                         {
                                             Time= IEngine.RunEngineSimulation(OutsideTemperature);
-
-                                            
-                                           
-
-                                            
+                                          
                                             PrintResult(OutsideTemperature, Time);
                                             break;
 
@@ -241,17 +237,15 @@ namespace EngineSimulation
         private static double ReadNewSpec()
         {
             Console.Write("Enter new value: ");
+            double Value;
 
-            if (double.TryParse(Console.ReadLine(), out double Value))
+            while (!double.TryParse(Console.ReadLine(), out  Value))
             {
-                return Value;
+                Console.WriteLine("Wrong input, try again.");
             }
-            else
-            {
-                Console.WriteLine("Wrong input, press any key to go back.");
-                Console.ReadKey();
-                return double.MinValue;
-            }
+            
+
+            return Value;
             
 
         }
