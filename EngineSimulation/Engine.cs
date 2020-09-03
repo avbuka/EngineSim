@@ -11,21 +11,22 @@ namespace EngineSimulation
     class Engine
     {
         //engine inertia
-        private const double Inertia = 10;
+        public double Inertia { get; set; }
 
-        private const double OverheatingTemperature = 110;
+
+        public double OverheatingTemperature { get; set; }
 
         //Коэффициент зависимости скорости нагрева от крутящего момента
-        private const double Hm = 0.01;
+        public double Hm { get; set; }
 
         //Коэффициент зависимости скорости нагрева от скорости вращения коленвала 
-        private const double Hv = 0.0001;
+        public double Hv { get; set; }
 
         //Коэффициент зависимости скорости охлаждения от температуры двигателя и окружающей среды
-        private const double C = 0.1;
+        public double C { get; set; }
 
         //Температура двигателя
-        private double EngineTemperature =0;
+        private double EngineTemperature { get; set; }
 
         //Температура снаружи
         private double TOutside;
@@ -42,17 +43,20 @@ namespace EngineSimulation
         //крутящий момент двигателя 
         private double EngineTorque =20;
 
-        private int[] MArray = null;
-        private int[] VArray = null;
+        //массивы для М и V
+        private double[] MArray { get; set; }
+        private double[] VArray { get; set; }
 
-       public Engine()
+
+        public Engine()
         {
         }
+
         public override string ToString()
         {
             string ReturnString =string.Empty;
 
-            ReturnString += "Inertia = " + Inertia +"\n";
+            ReturnString += "I = " + Inertia +"\n";
 
             if(MArray!=null)
             {
@@ -88,7 +92,7 @@ namespace EngineSimulation
                 ReturnString += "} \n";
             }
 
-            ReturnString += "Temperature of overheating = " + OverheatingTemperature + "\n";
+            ReturnString += "T = " + OverheatingTemperature + "\n";
             ReturnString += "Hm = " + Hm + "\n";
             ReturnString += "Hv = " + Hv + "\n";
             ReturnString += "C = " + C + "\n";
@@ -113,6 +117,7 @@ namespace EngineSimulation
         {
             if (OutsideTemperature > -150 && OutsideTemperature < 110)
             {
+
                 //перемення для выхода если двиг не перегревается
                 double Epsilon = 0.00000001;
 
@@ -202,14 +207,14 @@ namespace EngineSimulation
             return CoolingSpeed;
         }
 
-        public void FillMArray(int [] RightMArray)
+        public void FillMArray(double [] RightMArray)
         {
             if (RightMArray.Length<=0)
             {
                 throw new Exception("Zero length array given.");
             }
 
-            MArray = new int[RightMArray.Length];
+            MArray = new double[RightMArray.Length];
 
             for (int i = 0; i < RightMArray.Length; i++)
             {
@@ -217,14 +222,14 @@ namespace EngineSimulation
             }
         }
 
-        public void FillVArray(int [] RightVArray)
+        public void FillVArray(double [] RightVArray)
         {
             if (RightVArray.Length <= 0)
             {
                 throw new Exception("Zero length array given.");
             }
 
-            VArray = new int[RightVArray.Length];
+            VArray = new double[RightVArray.Length];
 
             for (int i = 0; i < RightVArray.Length; i++)
             {

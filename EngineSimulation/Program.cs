@@ -17,7 +17,7 @@ namespace EngineSimulation
         {
 
             // M array
-            int[] MArray = new int[6];
+            double[] MArray = new double[6];
 
             MArray[0] = 20;
             MArray[1] = 75;
@@ -25,9 +25,9 @@ namespace EngineSimulation
             MArray[3] = 105;
             MArray[4] = 75;
             MArray[5] = 0;
-            
+
             // V array
-            int[] VArray = new int[6];
+            double[] VArray = new double[6];
 
             VArray[0] = 0;
             VArray[1] = 75;
@@ -40,11 +40,19 @@ namespace EngineSimulation
             string LineString;
 
             double Time = 0;
+            double TempValue =0;
+            int NumOfPoints = 6;
 
             Engine IEngine = new Engine();
 
             IEngine.FillMArray(MArray);
             IEngine.FillVArray(VArray);
+
+            IEngine.Inertia = 10;
+            IEngine.OverheatingTemperature = 110;
+            IEngine.Hm = 0.01;
+            IEngine.Hv = 0.0001;
+            IEngine.C = 0.1;
          
 
             while(true)
@@ -117,6 +125,91 @@ namespace EngineSimulation
                                 Console.ReadKey();
                                 break;
                             }
+                        case "3":
+                            {
+                                Console.Clear();
+                                Console.WriteLine(IEngine.ToString());
+                                Console.WriteLine("q) Exit \n");
+
+                                Console.WriteLine("Enter letter(-s) you would like to edit and press Enter.");
+
+                                LineString = Console.ReadLine();
+
+                                switch (LineString)
+                                {
+                                    case "I":
+                                        {
+
+                                            TempValue = ReadNewSpec();
+
+                                            if(TempValue!=double.MinValue)
+                                                IEngine.Inertia = TempValue;
+                                            continue;
+                                        }
+                                    case "Hm":
+                                        {
+                                            TempValue = ReadNewSpec();
+                                            IEngine.Hm = TempValue;
+                                            break;
+                                        }
+                                    case "Hv":
+                                        {
+
+                                            TempValue = ReadNewSpec();
+                                            IEngine.Hv = TempValue;
+                                            break;
+                                        } 
+                                    case "C":
+                                        {
+
+                                            TempValue = ReadNewSpec();
+                                            IEngine.C = TempValue;
+                                            break;
+                                        }
+                                         
+                                    case "M":
+                                        {
+                                            double [] NewArray = new double[NumOfPoints];
+
+                                            for (int i = 0; i < NumOfPoints; i++)
+                                            {
+                                                TempValue = ReadNewSpec();
+                                                NewArray[i] = TempValue;
+                                            }
+                                            IEngine.FillMArray(NewArray);
+                                            break;
+                                        }
+                                    case "V":
+                                        {
+                                            double [] NewArray = new double[NumOfPoints];
+
+                                            for (int i = 0; i < NumOfPoints; i++)
+                                            {
+                                                Console.Write($"{i+1}) ");
+                                                TempValue = ReadNewSpec();
+                                                NewArray[i] = TempValue;
+                                            }
+                                            IEngine.FillVArray(NewArray);
+                                            break;
+                                        } 
+                                    case "T":
+                                        {
+                                            TempValue = ReadNewSpec();
+                                            IEngine.OverheatingTemperature = TempValue;
+                                            break;
+                                        }
+                                        
+                                    case "q":
+                                        {
+                                            break;
+                                        }
+
+                                    default:
+                                        break;
+                                }
+                               // Console.ReadKey();
+                                break;
+                            }
 
                         case "q":
                             {
@@ -140,6 +233,24 @@ namespace EngineSimulation
                 {
                     
                 }
+            }
+            
+
+        }
+
+        private static double ReadNewSpec()
+        {
+            Console.Write("Enter new value: ");
+
+            if (double.TryParse(Console.ReadLine(), out double Value))
+            {
+                return Value;
+            }
+            else
+            {
+                Console.WriteLine("Wrong input, press any key to go back.");
+                Console.ReadKey();
+                return double.MinValue;
             }
             
 
@@ -175,6 +286,7 @@ namespace EngineSimulation
             MenuString += "Choose one option from below followed by \"Enter\". \n\n";
             MenuString += "1) Run Engine Test \n";
             MenuString += "2) Print engine specs \n";
+            MenuString += "3) Edit engine specs \n";
             MenuString += "q) Exit \n";
 
           
